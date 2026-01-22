@@ -4,7 +4,6 @@ import DashboardHeader from "../dashboard/DashboardHeader";
 import { Toaster } from "react-hot-toast";
 import { CiViewBoard } from "react-icons/ci";
 import { FaUsersCog } from "react-icons/fa";
-import { IoSettingsOutline } from "react-icons/io5";
 import {
   TbLayoutSidebarLeftCollapse,
   TbLayoutSidebarRightCollapse,
@@ -31,10 +30,9 @@ const DashboardLayout: React.FC = () => {
         </Link>
 
         <nav className="flex-1 px-4 py-6 space-y-2">
-          {/* Use 'end' for the base dashboard route so it isn't active for every sub-page */}
           <SidebarItem
             destination="/dashboard"
-            icon={<CiViewBoard />}
+            icon={<CiViewBoard size={20} />}
             label="Overview"
             isOpen={isSidebarOpen}
             end
@@ -48,7 +46,7 @@ const DashboardLayout: React.FC = () => {
             </p>
             <SidebarItem
               destination="/dashboard/projects"
-              icon={<GrProjects />}
+              icon={<GrProjects size={20} />}
               label="All Projects"
               isOpen={isSidebarOpen}
             />
@@ -62,14 +60,8 @@ const DashboardLayout: React.FC = () => {
                 </p>
                 <SidebarItem
                   destination="/dashboard/manage-users"
-                  icon={<FaUsersCog />}
+                  icon={<FaUsersCog size={20} />}
                   label="Manage Users"
-                  isOpen={isSidebarOpen}
-                />
-                <SidebarItem
-                  destination="/dashboard/settings"
-                  icon={<IoSettingsOutline />}
-                  label="Settings"
                   isOpen={isSidebarOpen}
                 />
               </div>
@@ -106,8 +98,6 @@ const DashboardLayout: React.FC = () => {
     </div>
   );
 };
-
-// --- Helper Component ---
 
 interface SidebarItemProps {
   destination: string;

@@ -8,15 +8,16 @@ import { FaUsers } from "react-icons/fa";
 import { FaLink } from "react-icons/fa6";
 import { IoIosCopy } from "react-icons/io";
 import { MdCreateNewFolder } from "react-icons/md";
+import CreateProjectModal from "../components/CreateProjectModal";
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosSecure();
   const isAdmin = user?.role === "ADMIN";
   const [copied, setCopied] = useState(false);
-
   const [inviteData, setInviteData] = useState({ email: "", role: "STAFF" });
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const { data: projects = [], isLoading: projectsLoading } = useQuery({
     queryKey: ["projects"],
@@ -82,14 +83,14 @@ const Dashboard: React.FC = () => {
         <StatCard
           title="Total Projects"
           value={projects.length}
-          icon={<GoProjectSymlink />}
+          icon={<GoProjectSymlink size={15} />}
           color="bg-blue-500"
         />
         {isAdmin && (
           <StatCard
             title="Total Users"
             value={users.length}
-            icon={<FaUsers />}
+            icon={<FaUsers size={20} />}
             color="bg-purple-500"
           />
         )}
@@ -176,9 +177,19 @@ const Dashboard: React.FC = () => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h3 className="font-bold text-gray-800 mb-4">Quick Actions</h3>
           <div className="space-y-3">
-            <ActionButton
-              label="Create New Project"
-              icon={<MdCreateNewFolder />}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="w-full flex items-center p-3 rounded-lg font-medium text-sm transition hover:opacity-80 cursor-pointer bg-blue-50 text-blue-600"
+            >
+              <span className="mr-3">
+                <MdCreateNewFolder size={25} />
+              </span>
+              Create New Project
+            </button>
+
+            <CreateProjectModal
+              isOpen={isModalOpen}
+              onClose={() => setIsModalOpen(false)}
             />
           </div>
         </div>
@@ -199,18 +210,6 @@ const StatCard = ({ title, value, icon, color }: any) => (
       <p className="text-2xl font-bold text-gray-900">{value}</p>
     </div>
   </div>
-);
-
-const ActionButton = ({
-  label,
-  icon,
-  color = "bg-blue-50 text-blue-600",
-}: any) => (
-  <button
-    className={`w-full flex items-center p-3 rounded-lg font-medium text-sm transition hover:opacity-80 cursor-pointer ${color}`}
-  >
-    <span className="mr-3">{icon}</span> {label}
-  </button>
 );
 
 export default Dashboard;
