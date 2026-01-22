@@ -21,6 +21,8 @@ const useAxiosSecure = () => {
       return Promise.reject(error);
     },
   );
+
+  return instance;
 };
 
 export default useAxiosSecure;
