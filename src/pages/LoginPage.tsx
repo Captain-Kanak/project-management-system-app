@@ -1,5 +1,8 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
 import useAxiosPublic from "../hooks/useAxiosPublic";
+import { setToken, setUserLocal } from "../helpers/localStorage";
+import { useNavigate } from "react-router";
+import { useAuth } from "../auth/AuthContext";
 
 interface LoginFormData {
   email: string;
@@ -12,6 +15,8 @@ const LoginPage: React.FC = () => {
     password: "",
   });
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,7 +38,12 @@ const LoginPage: React.FC = () => {
 
     const data = res.data.data;
 
-    console.log("Login response:", data);
+    if (res.data.success) {
+      setToken(data.token);
+      setUser(data.user);
+      setUserLocal(data.user);
+      navigate("/", { replace: true });
+    }
   };
 
   return (

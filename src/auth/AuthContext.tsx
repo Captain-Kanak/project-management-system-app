@@ -20,14 +20,16 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<AuthUser | null>(null);
+  const [user, setUser] = useState<AuthUser | null>(() => getUser());
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     const storedUser = getUser();
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+    if (storedUser) setUser(storedUser);
+    setInitialized(true);
   }, []);
+
+  if (!initialized) return null;
 
   const logout = () => {
     removeToken();
