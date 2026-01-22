@@ -207,7 +207,7 @@ const ActionButton = ({
   color = "bg-blue-50 text-blue-600",
 }: any) => (
   <button
-    className={`w-full flex items-center p-3 rounded-lg font-medium text-sm transition hover:opacity-80 ${color}`}
+    className={`w-full flex items-center p-3 rounded-lg font-medium text-sm transition hover:opacity-80 cursor-pointer ${color}`}
   >
     <span className="mr-3">{icon}</span> {label}
   </button>

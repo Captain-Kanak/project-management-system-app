@@ -6,6 +6,7 @@ import RegisterPage from "../pages/RegisterPage";
 import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../dashboard/Dashboard";
 import { ProtectedRoute } from "../auth/ProtectedRoute";
+import AllProjects from "../dashboard/AllProjects";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Dashboard,
+      },
+      {
+        path: "projects",
+        Component: AllProjects,
       },
     ],
   },

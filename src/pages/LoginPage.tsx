@@ -19,6 +19,7 @@ const LoginPage: React.FC = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
   const { setUser } = useAuth();
 
@@ -38,7 +39,7 @@ const LoginPage: React.FC = () => {
     }
 
     try {
-      const res = await useAxiosPublic().post("/auth/login", {
+      const res = await axiosPublic.post("/auth/login", {
         email,
         password,
       });

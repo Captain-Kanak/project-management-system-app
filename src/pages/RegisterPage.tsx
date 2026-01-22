@@ -14,6 +14,7 @@ const RegisterPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
+  const axiosPublic = useAxiosPublic();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,10 +59,7 @@ const RegisterPage: React.FC = () => {
     console.log("Submitting registration:", payload);
 
     try {
-      const res = await useAxiosPublic().post(
-        "/auth/register-via-invite",
-        payload,
-      );
+      const res = await axiosPublic.post("/auth/register-via-invite", payload);
 
       if (res.data.success) {
         toast.success("Registration successful. Please log in!");
