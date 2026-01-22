@@ -29,7 +29,7 @@ const CreateProjectModal: React.FC<CreateProjectModalProps> = ({
       queryClient.invalidateQueries({ queryKey: ["projects"] });
       toast.success("Project created successfully!");
       setFormData({ name: "", description: "" });
-      onClose(); // Close modal on success
+      onClose();
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Failed to create project");
