@@ -8,7 +8,6 @@ const DashboardLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen bg-gray-50 overflow-hidden">
-      {/* Sidebar - Desktop */}
       <aside
         className={`${
           isSidebarOpen ? "w-64" : "w-20"
@@ -56,7 +55,6 @@ const DashboardLayout: React.FC = () => {
         </div>
       </aside>
 
-      {/* Main Content Area */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <DashboardHeader />
 

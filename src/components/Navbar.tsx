@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router";
 import Logo from "./Logo";
 
 const Navbar: React.FC = () => {
@@ -11,27 +12,25 @@ const Navbar: React.FC = () => {
     { name: "Register", href: "/register" },
   ];
 
+  const linkStyles = ({ isActive }: { isActive: boolean }) =>
+    isActive
+      ? "text-blue-600 text-sm font-bold transition py-5"
+      : "text-gray-600 hover:text-blue-600 text-sm font-medium transition py-5";
+
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0">
+    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          {/* Logo Section */}
           <Logo />
 
-          {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.href}
-                className="text-gray-600 hover:text-blue-600 text-sm font-medium transition"
-              >
+              <NavLink key={link.name} to={link.href} className={linkStyles}>
                 {link.name}
-              </a>
+              </NavLink>
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsOpen(!isOpen)}
@@ -64,18 +63,24 @@ const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Content */}
       {isOpen && (
         <div className="md:hidden bg-white border-t border-gray-100">
           <div className="px-2 pt-2 pb-3 space-y-1">
             {navLinks.map((link) => (
-              <a
+              <NavLink
                 key={link.name}
-                href={link.href}
-                className="block px-3 py-2 text-base font-medium text-gray-600 hover:text-blue-600 hover:bg-gray-50 rounded-md"
+                to={link.href}
+                onClick={() => setIsOpen(false)}
+                className={({ isActive }) =>
+                  `block px-3 py-2 text-base font-medium rounded-md ${
+                    isActive
+                      ? "bg-blue-50 text-blue-600"
+                      : "text-gray-600 hover:bg-gray-50"
+                  }`
+                }
               >
                 {link.name}
-              </a>
+              </NavLink>
             ))}
           </div>
         </div>

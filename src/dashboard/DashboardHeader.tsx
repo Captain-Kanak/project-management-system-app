@@ -5,7 +5,6 @@ const DashboardHeader: React.FC = () => {
 
   return (
     <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6 sticky top-0 z-30">
-      {/* 1. Search Bar (Functional Utility) */}
       <div className="hidden sm:flex items-center relative w-96">
         <span className="absolute left-3 text-gray-400">
           <svg
@@ -29,9 +28,7 @@ const DashboardHeader: React.FC = () => {
         />
       </div>
 
-      {/* 2. Actions & Profile */}
       <div className="flex items-center space-x-4">
-        {/* Notification Bell */}
         <button className="p-2 text-gray-500 hover:bg-gray-100 rounded-full relative transition">
           <svg
             className="w-6 h-6"
@@ -49,10 +46,8 @@ const DashboardHeader: React.FC = () => {
           <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
         </button>
 
-        {/* Divider */}
         <div className="h-8 w-px bg-gray-200 mx-2"></div>
 
-        {/* User Profile Dropdown */}
         <div className="relative">
           <button
             onClick={() => setShowProfileMenu(!showProfileMenu)}
@@ -69,7 +64,6 @@ const DashboardHeader: React.FC = () => {
             </div>
           </button>
 
-          {/* Dropdown Menu */}
           {showProfileMenu && (
             <div className="absolute right-0 mt-3 w-48 bg-white border border-gray-200 rounded-xl shadow-xl py-2 z-50">
               <a

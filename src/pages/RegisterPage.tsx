@@ -9,7 +9,6 @@ const RegisterPage: React.FC = () => {
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Extract token from URL on mount (e.g., ?token=abc123)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const inviteToken = params.get("token");
@@ -38,9 +37,8 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
-    // Example payload for your backend
     const payload = {
-      token, // The backend uses this to identify the associated email
+      token,
       name: formData.name,
       password: formData.password,
     };

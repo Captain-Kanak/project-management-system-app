@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent, FormEvent } from "react";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 interface LoginFormData {
   email: string;
@@ -21,14 +22,18 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setError(null);
 
-    // Basic Validation
-    if (!formData.email || !formData.password) {
+    const { email, password } = formData;
+
+    if (!email || !password) {
       setError("Please fill in all fields.");
       return;
     }
 
-    console.log("Logging in with:", formData);
-    // Add your API call logic here
+    const res = await useAxiosPublic().post("/auth/login", { email, password });
+
+    const data = res.data.data;
+
+    console.log("Login response:", data);
   };
 
   return (

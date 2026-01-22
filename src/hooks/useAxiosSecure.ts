@@ -6,7 +6,7 @@ const instance = axios.create({
   withCredentials: true,
 });
 
-const axiosSecure = () => {
+const useAxiosSecure = () => {
   instance.interceptors.request.use(
     async (config) => {
       const token = getToken();
@@ -23,4 +23,4 @@ const axiosSecure = () => {
   );
 };
 
-export default axiosSecure;
+export default useAxiosSecure;
