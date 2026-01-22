@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
+import Spinner from "../components/Spinner";
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -12,7 +13,7 @@ const Dashboard: React.FC = () => {
   const [inviteData, setInviteData] = useState({ email: "", role: "STAFF" });
   const [generatedLink, setGeneratedLink] = useState<string | null>(null);
 
-  const { data: projects = [] } = useQuery({
+  const { data: projects = [], isLoading: projectsLoading } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -22,7 +23,7 @@ const Dashboard: React.FC = () => {
     },
   });
 
-  const { data: users = [] } = useQuery({
+  const { data: users = [], isLoading: usersLoading } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const res = await axiosSecure.get(
@@ -63,6 +64,8 @@ const Dashboard: React.FC = () => {
       setTimeout(() => setCopied(false), 2000);
     }
   };
+
+  if (projectsLoading || usersLoading) return <Spinner />;
 
   return (
     <div className="space-y-8">
