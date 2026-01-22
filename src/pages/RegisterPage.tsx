@@ -1,4 +1,9 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
+import { IoEyeOutline } from "react-icons/io5";
+import { IoEyeOffOutline } from "react-icons/io5";
+import useAxiosPublic from "../hooks/useAxiosPublic";
+import { useNavigate } from "react-router";
+import toast from "react-hot-toast";
 
 const RegisterPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -8,6 +13,8 @@ const RegisterPage: React.FC = () => {
   });
   const [token, setToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -32,6 +39,11 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters long.");
+      return;
+    }
+
     if (formData.password !== formData.confirmPassword) {
       setError("Passwords do not match.");
       return;
@@ -44,7 +56,22 @@ const RegisterPage: React.FC = () => {
     };
 
     console.log("Submitting registration:", payload);
-    // Add your API call here (e.g., fetch('/api/register', { method: 'POST', ... }))
+
+    try {
+      const res = await useAxiosPublic().post(
+        "/auth/register-via-invite",
+        payload,
+      );
+
+      if (res.data.success) {
+        toast.success("Registration successful. Please log in!");
+        navigate("/login", { replace: true });
+      }
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again.",
+      );
+    }
   };
 
   return (
@@ -85,36 +112,66 @@ const RegisterPage: React.FC = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Password
             </label>
-            <input
-              type="password"
-              name="password"
-              required
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-            />
+            {/* Added 'relative' here */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                // Added 'pr-12' to prevent text overlap
+                className="w-full px-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-blue-600 transition cursor-pointer"
+              >
+                {showPassword ? (
+                  <IoEyeOutline className="h-5 w-5" />
+                ) : (
+                  <IoEyeOffOutline className="h-5 w-5" />
+                )}
+              </button>
+            </div>
           </div>
 
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Confirm Password
             </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              required
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="••••••••"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-            />
+            {/* Added 'relative' here */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="confirmPassword"
+                required
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                placeholder="••••••••"
+                // Added 'pr-12' to prevent text overlap
+                className="w-full px-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-blue-600 transition cursor-pointer"
+              >
+                {showPassword ? (
+                  <IoEyeOutline className="h-5 w-5" />
+                ) : (
+                  <IoEyeOffOutline className="h-5 w-5" />
+                )}
+              </button>
+            </div>
           </div>
 
           <button
             type="submit"
             disabled={!token}
-            className={`w-full py-3 px-4 rounded-lg font-bold text-white transition duration-200 ${
+            className={`w-full py-3 px-4 rounded-lg font-bold text-white transition duration-200 cursor-pointer ${
               !token
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-blue-600 hover:bg-blue-700 shadow-md"

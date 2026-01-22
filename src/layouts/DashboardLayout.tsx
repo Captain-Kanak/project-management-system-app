@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router";
 import DashboardHeader from "../dashboard/DashboardHeader";
+import { Toaster } from "react-hot-toast";
 
 const DashboardLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -61,6 +62,7 @@ const DashboardLayout: React.FC = () => {
         <main className="flex-1 overflow-x-hidden overflow-y-auto p-6 bg-gray-50">
           <div className="container mx-auto">
             <Outlet />
+            <Toaster />
           </div>
         </main>
       </div>

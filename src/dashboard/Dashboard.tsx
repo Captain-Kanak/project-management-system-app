@@ -81,12 +81,14 @@ const Dashboard: React.FC = () => {
           icon="📁"
           color="bg-blue-500"
         />
-        <StatCard
-          title="Active Users"
-          value={users.length}
-          icon="👤"
-          color="bg-gray-400"
-        />
+        {isAdmin && (
+          <StatCard
+            title="Total Users"
+            value={users.length}
+            icon="👤"
+            color="bg-purple-500"
+          />
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -3,6 +3,9 @@ import useAxiosPublic from "../hooks/useAxiosPublic";
 import { setToken, setUserLocal } from "../helpers/localStorage";
 import { useNavigate } from "react-router";
 import { useAuth } from "../auth/AuthContext";
+import { IoEyeOutline } from "react-icons/io5";
+import { IoEyeOffOutline } from "react-icons/io5";
+import toast from "react-hot-toast";
 
 interface LoginFormData {
   email: string;
@@ -14,6 +17,7 @@ const LoginPage: React.FC = () => {
     email: "",
     password: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
   const { setUser } = useAuth();
@@ -28,21 +32,29 @@ const LoginPage: React.FC = () => {
     setError(null);
 
     const { email, password } = formData;
-
     if (!email || !password) {
       setError("Please fill in all fields.");
       return;
     }
 
-    const res = await useAxiosPublic().post("/auth/login", { email, password });
+    try {
+      const res = await useAxiosPublic().post("/auth/login", {
+        email,
+        password,
+      });
+      const data = res.data.data;
 
-    const data = res.data.data;
-
-    if (res.data.success) {
-      setToken(data.token);
-      setUser(data.user);
-      setUserLocal(data.user);
-      navigate("/", { replace: true });
+      if (res.data.success) {
+        toast.success("Login successful!");
+        setToken(data.token);
+        setUser(data.user);
+        setUserLocal(data.user);
+        navigate("/", { replace: true });
+      }
+    } catch (err: any) {
+      setError(
+        err.response?.data?.message || "Login failed. Please try again.",
+      );
     }
   };
 
@@ -67,6 +79,7 @@ const LoginPage: React.FC = () => {
             <input
               type="email"
               name="email"
+              required
               value={formData.email}
               onChange={handleChange}
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
@@ -78,14 +91,29 @@ const LoginPage: React.FC = () => {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
-              placeholder="••••••••"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                required
+                value={formData.password}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition pr-10"
+                placeholder="••••••••"
+              />
+              {/* Eye Icon Button */}
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-blue-600 transition cursor-pointer"
+              >
+                {showPassword ? (
+                  <IoEyeOutline className="h-5 w-5" />
+                ) : (
+                  <IoEyeOffOutline className="h-5 w-5" />
+                )}
+              </button>
+            </div>
           </div>
 
           <button
