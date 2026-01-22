@@ -101,7 +101,6 @@ const LoginPage: React.FC = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition pr-10"
                 placeholder="••••••••"
               />
-              {/* Eye Icon Button */}
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}

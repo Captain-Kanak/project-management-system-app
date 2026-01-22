@@ -3,6 +3,11 @@ import { useAuth } from "../auth/AuthContext";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Spinner from "../components/Spinner";
+import { GoProjectSymlink } from "react-icons/go";
+import { FaUsers } from "react-icons/fa";
+import { FaLink } from "react-icons/fa6";
+import { IoIosCopy } from "react-icons/io";
+import { MdCreateNewFolder } from "react-icons/md";
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth();
@@ -60,7 +65,6 @@ const Dashboard: React.FC = () => {
       navigator.clipboard.writeText(generatedLink);
       setCopied(true);
 
-      // Reset the "Copied" state after 2 seconds
       setTimeout(() => setCopied(false), 2000);
     }
   };
@@ -78,14 +82,14 @@ const Dashboard: React.FC = () => {
         <StatCard
           title="Total Projects"
           value={projects.length}
-          icon="📁"
+          icon={<GoProjectSymlink />}
           color="bg-blue-500"
         />
         {isAdmin && (
           <StatCard
             title="Total Users"
             value={users.length}
-            icon="👤"
+            icon={<FaUsers />}
             color="bg-purple-500"
           />
         )}
@@ -95,7 +99,10 @@ const Dashboard: React.FC = () => {
         {isAdmin && (
           <div className="bg-purple-50 rounded-xl border border-purple-100 p-6">
             <h3 className="font-bold text-purple-900 mb-4 flex items-center">
-              <span className="mr-2 text-lg">🔗</span> Generate Invite Link
+              <span className="mr-2 text-lg">
+                <FaLink />
+              </span>{" "}
+              Generate Invite Link
             </h3>
 
             <form onSubmit={handleInviteSubmit} className="space-y-3">
@@ -150,36 +157,12 @@ const Dashboard: React.FC = () => {
                   >
                     {copied ? (
                       <>
-                        <svg
-                          className="w-3 h-3"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="3"
-                            d="M5 13l4 4L19 7"
-                          />
-                        </svg>
+                        <IoIosCopy />
                         Copied!
                       </>
                     ) : (
                       <>
-                        <svg
-                          className="w-3 h-3"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3"
-                          />
-                        </svg>
+                        <IoIosCopy />
                         Copy Link
                       </>
                     )}
@@ -193,11 +176,9 @@ const Dashboard: React.FC = () => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
           <h3 className="font-bold text-gray-800 mb-4">Quick Actions</h3>
           <div className="space-y-3">
-            <ActionButton label="Create New Project" icon="➕" />
             <ActionButton
-              label="Account Settings"
-              icon="⚙️"
-              color="bg-gray-50 text-gray-600"
+              label="Create New Project"
+              icon={<MdCreateNewFolder />}
             />
           </div>
         </div>
@@ -206,7 +187,6 @@ const Dashboard: React.FC = () => {
   );
 };
 
-/* Helper Components remained mostly the same but ensure props are clean */
 const StatCard = ({ title, value, icon, color }: any) => (
   <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex items-center space-x-4">
     <div

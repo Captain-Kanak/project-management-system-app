@@ -2,6 +2,11 @@ import React, { useState } from "react";
 import { Link, Outlet } from "react-router";
 import DashboardHeader from "../dashboard/DashboardHeader";
 import { Toaster } from "react-hot-toast";
+import { CiViewBoard } from "react-icons/ci";
+import { FaUsersCog } from "react-icons/fa";
+import { IoSettingsOutline } from "react-icons/io5";
+import { TbLayoutSidebarLeftCollapse } from "react-icons/tb";
+import { TbLayoutSidebarRightCollapse } from "react-icons/tb";
 
 const DashboardLayout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -22,12 +27,11 @@ const DashboardLayout: React.FC = () => {
 
         <nav className="flex-1 px-4 py-6 space-y-4">
           <SidebarItem
-            icon="📊"
+            icon={<CiViewBoard />}
             label="Overview"
             active
             isOpen={isSidebarOpen}
           />
-          <SidebarItem icon="👤" label="My Profile" isOpen={isSidebarOpen} />
 
           {userRole === "ADMIN" && (
             <div className="pt-4 border-t border-slate-700">
@@ -37,11 +41,15 @@ const DashboardLayout: React.FC = () => {
                 {isSidebarOpen ? "ADMINISTRATION" : "ADM"}
               </p>
               <SidebarItem
-                icon="👥"
+                icon={<FaUsersCog />}
                 label="Manage Users"
                 isOpen={isSidebarOpen}
               />
-              <SidebarItem icon="⚙️" label="Settings" isOpen={isSidebarOpen} />
+              <SidebarItem
+                icon={<IoSettingsOutline />}
+                label="Settings"
+                isOpen={isSidebarOpen}
+              />
             </div>
           )}
         </nav>
@@ -49,9 +57,18 @@ const DashboardLayout: React.FC = () => {
         <div className="p-4 border-t border-slate-800">
           <button
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="w-full text-slate-400 hover:text-white text-sm cursor-pointer"
+            className="w-full flex items-center justify-center gap-2 text-slate-400 hover:text-white text-sm cursor-pointer"
           >
-            {isSidebarOpen ? "← Collapse" : "→"}
+            {isSidebarOpen ? (
+              <>
+                <TbLayoutSidebarLeftCollapse size={20} />
+                <span>Collapse</span>
+              </>
+            ) : (
+              <>
+                <TbLayoutSidebarRightCollapse size={20} />
+              </>
+            )}
           </button>
         </div>
       </aside>
@@ -70,7 +87,6 @@ const DashboardLayout: React.FC = () => {
   );
 };
 
-/* Helper Component for Sidebar Items */
 const SidebarItem = ({ icon, label, active = false, isOpen = true }: any) => (
   <a
     href="#"

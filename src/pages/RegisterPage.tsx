@@ -112,16 +112,15 @@ const RegisterPage: React.FC = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Password
             </label>
-            {/* Added 'relative' here */}
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
                 required
+                minLength={6}
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                // Added 'pr-12' to prevent text overlap
                 className="w-full px-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
               />
               <button
@@ -142,16 +141,15 @@ const RegisterPage: React.FC = () => {
             <label className="block text-sm font-semibold text-gray-700 mb-1">
               Confirm Password
             </label>
-            {/* Added 'relative' here */}
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
                 name="confirmPassword"
                 required
+                minLength={6}
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 placeholder="••••••••"
-                // Added 'pr-12' to prevent text overlap
                 className="w-full px-4 pr-12 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition"
               />
               <button
@@ -167,6 +165,14 @@ const RegisterPage: React.FC = () => {
               </button>
             </div>
           </div>
+
+          <p
+            className={`mt-1 text-xs ${formData.password.length >= 6 ? "text-green-600" : "text-gray-500"}`}
+          >
+            {formData.password.length >= 6
+              ? "✓ Password length met"
+              : "• Must be at least 6 characters"}
+          </p>
 
           <button
             type="submit"

@@ -3,7 +3,7 @@ import React from "react";
 interface SpinnerProps {
   size?: "sm" | "md" | "lg";
   color?: string;
-  fullScreen?: boolean; // Added this prop
+  fullScreen?: boolean;
 }
 
 const Spinner: React.FC<SpinnerProps> = ({
