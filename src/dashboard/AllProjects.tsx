@@ -163,7 +163,7 @@ const AllProjects: React.FC = () => {
                       >
                         <option value="ACTIVE">ACTIVE</option>
                         <option value="ARCHIVED">ARCHIVED</option>
-                        <option value="DELETED">DELETED</option>
+                        {/* <option value="DELETED">DELETED</option> */}
                       </select>
                     ) : (
                       <StatusBadge status={project.status} />
