@@ -3,22 +3,33 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Spinner from "../components/Spinner";
 import toast from "react-hot-toast";
-import { BiLoaderAlt } from "react-icons/bi";
+import { BiLoaderAlt, BiChevronLeft, BiChevronRight } from "react-icons/bi";
 
 const AllUsers: React.FC = () => {
   const axiosSecure = useAxiosSecure();
   const queryClient = useQueryClient();
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  const { data: users = [], isLoading: usersLoading } = useQuery({
-    queryKey: ["users"],
+  // Pagination State
+  const [page, setPage] = useState(1);
+  const limit = 10;
+
+  const { data, isLoading: usersLoading } = useQuery({
+    // IMPORTANT: Include page in queryKey so TanStack Query refetches on page change
+    queryKey: ["users", page],
     queryFn: async () => {
       const res = await axiosSecure.get(
-        `${import.meta.env.VITE_API_URL}/users`,
+        `${import.meta.env.VITE_API_URL}/users/?page=${page}&limit=${limit}`,
       );
-      return res.data.data;
+      return res.data; // Assuming backend returns { data: [], total: 50 }
     },
   });
+
+  const users = data?.data || [];
+  const totalUsers = data?.total || 0;
+  const totalPages = Math.ceil(totalUsers / limit);
+
+  // ... (keep your existing updateMutation and handleUpdate functions)
 
   const updateMutation = useMutation({
     mutationFn: async ({
@@ -61,11 +72,16 @@ const AllUsers: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">User Management</h1>
-        <p className="text-slate-500">
-          Update user roles and account statuses.
-        </p>
+      <div className="flex justify-between items-end">
+        <div>
+          <h1 className="text-2xl font-bold text-slate-900">User Management</h1>
+          <p className="text-slate-500">
+            Update user roles and account statuses.
+          </p>
+        </div>
+        <div className="text-sm text-slate-500 font-medium">
+          Total Users: <span className="text-slate-900">{totalUsers}</span>
+        </div>
       </div>
 
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
@@ -98,7 +114,6 @@ const AllUsers: React.FC = () => {
                       </div>
                     </div>
                   </td>
-
                   <td className="px-6 py-4">
                     <select
                       value={user.role}
@@ -106,14 +121,13 @@ const AllUsers: React.FC = () => {
                       onChange={(e) =>
                         handleUpdate(user.id, "role", e.target.value)
                       }
-                      className="text-sm bg-white border border-slate-300 rounded-md px-2 py-1.5 focus:ring-2 focus:ring-blue-500 outline-none cursor-pointer disabled:opacity-50"
+                      className="text-sm bg-white border border-slate-300 rounded-md px-2 py-1.5 outline-none cursor-pointer"
                     >
                       <option value="ADMIN">ADMIN</option>
                       <option value="MANAGER">MANAGER</option>
                       <option value="STAFF">STAFF</option>
                     </select>
                   </td>
-
                   <td className="px-6 py-4">
                     <select
                       value={user.status}
@@ -121,17 +135,16 @@ const AllUsers: React.FC = () => {
                       onChange={(e) =>
                         handleUpdate(user.id, "status", e.target.value)
                       }
-                      className={`text-xs font-bold border rounded-full px-3 py-1 outline-none cursor-pointer transition-colors ${
+                      className={`text-xs font-bold border rounded-full px-3 py-1 outline-none cursor-pointer ${
                         user.status === "ACTIVE"
-                          ? "bg-green-50 text-green-700 border-green-200 hover:bg-green-100"
-                          : "bg-red-50 text-red-700 border-red-200 hover:bg-red-100"
+                          ? "bg-green-50 text-green-700 border-green-200"
+                          : "bg-red-50 text-red-700 border-red-200"
                       }`}
                     >
                       <option value="ACTIVE">ACTIVE</option>
                       <option value="INACTIVE">INACTIVE</option>
                     </select>
                   </td>
-
                   <td className="px-6 py-4 text-center">
                     {updatingId === user.id ? (
                       <BiLoaderAlt
@@ -146,6 +159,32 @@ const AllUsers: React.FC = () => {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Pagination Footer */}
+        <div className="px-6 py-4 bg-slate-50 border-t border-slate-200 flex items-center justify-between">
+          <button
+            onClick={() => setPage((old) => Math.max(old - 1, 1))}
+            disabled={page === 1}
+            className="flex items-center gap-1 px-3 py-1.5 rounded border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          >
+            <BiChevronLeft size={20} /> Previous
+          </button>
+
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-slate-600">
+              Page <span className="font-semibold text-slate-900">{page}</span>{" "}
+              of {totalPages}
+            </span>
+          </div>
+
+          <button
+            onClick={() => setPage((old) => (old < totalPages ? old + 1 : old))}
+            disabled={page === totalPages}
+            className="flex items-center gap-1 px-3 py-1.5 rounded border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+          >
+            Next <BiChevronRight size={20} />
+          </button>
         </div>
       </div>
     </div>
