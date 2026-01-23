@@ -1,11 +1,11 @@
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import Spinner from "../components/Spinner";
 import { HiOutlineDotsVertical, HiOutlinePlus } from "react-icons/hi";
-import { useState } from "react";
 import CreateProjectModal from "../components/CreateProjectModal";
 
-const AllProjects = () => {
+const AllProjects: React.FC = () => {
   const axiosSecure = useAxiosSecure();
   const [isModalOpen, setIsModalOpen] = useState(false);
 

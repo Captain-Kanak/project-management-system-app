@@ -7,6 +7,8 @@ import DashboardLayout from "../layouts/DashboardLayout";
 import Dashboard from "../dashboard/Dashboard";
 import { ProtectedRoute } from "../auth/ProtectedRoute";
 import AllProjects from "../dashboard/AllProjects";
+import AllUsers from "../dashboard/AllUsers";
+import { AdminRoute } from "../auth/AdminRoute";
 
 export const router = createBrowserRouter([
   {
@@ -42,6 +44,14 @@ export const router = createBrowserRouter([
       {
         path: "projects",
         Component: AllProjects,
+      },
+      {
+        path: "manage-users",
+        element: (
+          <AdminRoute>
+            <AllUsers />,
+          </AdminRoute>
+        ),
       },
     ],
   },
