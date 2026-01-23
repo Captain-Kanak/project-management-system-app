@@ -128,7 +128,6 @@ const AllUsers: React.FC = () => {
                       }`}
                     >
                       <option value="ACTIVE">ACTIVE</option>
-                      <option value="BLOCKED">BLOCKED</option>
                       <option value="INACTIVE">INACTIVE</option>
                     </select>
                   </td>
