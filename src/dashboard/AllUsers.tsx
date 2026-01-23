@@ -10,26 +10,22 @@ const AllUsers: React.FC = () => {
   const queryClient = useQueryClient();
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
-  // Pagination State
   const [page, setPage] = useState(1);
   const limit = 10;
 
   const { data, isLoading: usersLoading } = useQuery({
-    // IMPORTANT: Include page in queryKey so TanStack Query refetches on page change
     queryKey: ["users", page],
     queryFn: async () => {
       const res = await axiosSecure.get(
         `${import.meta.env.VITE_API_URL}/users/?page=${page}&limit=${limit}`,
       );
-      return res.data; // Assuming backend returns { data: [], total: 50 }
+      return res.data;
     },
   });
 
   const users = data?.data || [];
   const totalUsers = data?.total || 0;
   const totalPages = Math.ceil(totalUsers / limit);
-
-  // ... (keep your existing updateMutation and handleUpdate functions)
 
   const updateMutation = useMutation({
     mutationFn: async ({
@@ -166,7 +162,7 @@ const AllUsers: React.FC = () => {
           <button
             onClick={() => setPage((old) => Math.max(old - 1, 1))}
             disabled={page === 1}
-            className="flex items-center gap-1 px-3 py-1.5 rounded border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="flex items-center gap-1 px-3 py-1.5 rounded border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
           >
             <BiChevronLeft size={20} /> Previous
           </button>
@@ -181,7 +177,7 @@ const AllUsers: React.FC = () => {
           <button
             onClick={() => setPage((old) => (old < totalPages ? old + 1 : old))}
             disabled={page === totalPages}
-            className="flex items-center gap-1 px-3 py-1.5 rounded border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            className="flex items-center gap-1 px-3 py-1.5 rounded border border-slate-300 bg-white text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all cursor-pointer"
           >
             Next <BiChevronRight size={20} />
           </button>
